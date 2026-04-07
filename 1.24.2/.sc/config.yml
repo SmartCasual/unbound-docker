@@ -1,0 +1,11 @@
+---
+deploy:
+  lan:
+    source_dir: "."
+    container_registry: docker-registry.lan
+    image_name: unbound
+    version: 1.24.2
+    targets:
+      server.lan:
+        host: server.lan
+        compose_dir: "~/apps"

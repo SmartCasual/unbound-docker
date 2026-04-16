@@ -146,7 +146,7 @@ RUN chmod +x /unbound.sh
 WORKDIR /opt/unbound/
 
 ENV UNBOUND_VERSION=1.24.2
-ENV PATH=/opt/unbound/sbin:"$PATH"
+ENV PATH=/opt/unbound/sbin:/opt/openssl/bin:"$PATH"
 
 LABEL org.opencontainers.image.version=${UNBOUND_VERSION} \
       org.opencontainers.image.title="SmartCasual/unbound" \
@@ -158,6 +158,7 @@ LABEL org.opencontainers.image.version=${UNBOUND_VERSION} \
 
 EXPOSE 53/tcp
 EXPOSE 53/udp
+EXPOSE 8953/tcp
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 CMD drill @127.0.0.1 cloudflare.com || exit 1
 

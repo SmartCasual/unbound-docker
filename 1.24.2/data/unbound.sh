@@ -390,6 +390,10 @@ server:
 
 remote-control:
     control-enable: no
+    server-cert-file: "var/unbound_server.pem"
+    server-key-file: "var/unbound_server.key"
+    control-cert-file: "var/unbound_control.pem"
+    control-key-file: "var/unbound_control.key"
 
     include: /opt/unbound/etc/unbound/remote-control-override.conf
 EOT
@@ -401,5 +405,11 @@ cp -a /dev/random /dev/urandom /dev/null /opt/unbound/etc/unbound/dev/
 mkdir -p -m 700 /opt/unbound/etc/unbound/var && \
 chown _unbound:_unbound /opt/unbound/etc/unbound/var && \
 /opt/unbound/sbin/unbound-anchor -a /opt/unbound/etc/unbound/var/root.key
+
+# Generate TLS certificates for unbound-control
+/opt/unbound/sbin/unbound-control-setup -d /opt/unbound/etc/unbound/var
+chmod 644 /opt/unbound/etc/unbound/var/unbound_server.pem \
+          /opt/unbound/etc/unbound/var/unbound_control.pem \
+          /opt/unbound/etc/unbound/var/unbound_control.key
 
 exec /opt/unbound/sbin/unbound -d -c /opt/unbound/etc/unbound/unbound.conf
